@@ -1,13 +1,38 @@
-import React from 'react'
+import React from 'react';
 import { styled } from '@mui/material/styles';
-import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
-// import Box from '@mui/material/Box';
+import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import { Typography } from '@mui/material';
+import Images from '../../utilites/Images';
+import LoginwithGoogle from '../../assets/images/Google(1).webp';
+import programming from '../../assets/images/programming.webp';
+
+import "./auth.css";
+import InputBox from '../../utilites/InputBox';
+
+
+const BootstrapButton = styled(Button)({
+  boxShadow: 'none',
+  textTransform: 'none',
+  fontSize: '20px',
+  padding: '26px 122.77px',
+  border: '1px solid',
+  lineHeight: 1.5,
+  backgroundColor: '#0063cc',
+  borderColor: '#0063cc',
+  marginTop: '55px'
+  
+
+  
+
+
+});
+
+
 
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -30,15 +55,34 @@ const Login = () => {
     <Box sx={{ flexGrow: 1 }}>
     <Grid container spacing={0}>
       <Grid item xs={6} style={{display:'flex', alignItems:'center', justifyContent:'center'}}>
-        <Loginheading variant="h4">
-            Login to your account!
-         </Loginheading> 
-              <TextField id="outlined-basic" label="Outlined" variant="outlined" />
-              <TextField id="filled-basic" label="Filled" variant="filled" />
-              <TextField id="standard-basic" label="Standard" variant="standard" />
+        <div>
+            <Loginheading variant="h4">
+                Login to your account!
+            </Loginheading> 
+            <Images source={LoginwithGoogle} alt="google" className="LoginwithGoogle"/>
+            
+              <div className='inputbox'>
+                  <InputBox variant="standard" placeholder="enter your email"/>
+                  <InputBox variant="standard" placeholder="Enter your password"/>
+              </div>
+              <BootstrapButton variant="contained" disableRipple>
+                  Login to Continue
+              </BootstrapButton>
+              <div style={{marginTop:"35px"}}>
+                <span>Don’t have an account ?<a href="/Registration">Sign up</a></span> 
+
+              </div>
+        </div>
+
+
+
+
       </Grid>
       <Grid item xs={6}>
-        <div style={{backgroundColor:"red", width:"100%", height:"100vh"}}></div>
+         <div style={{width:"100%", height:"100vh"}}>
+          <Images source={programming} alt="programming" className="Loginprogramming"/>
+        
+        </div> 
       </Grid>
     </Grid>
   </Box>
