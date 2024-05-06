@@ -7,7 +7,7 @@ import {
 import Login from './pages/auth/Login';
 import Error from './pages/Error';
 import Rootlayout from './components/layouts/Rootlayout';
- import Registration from './pages/auth/Registration';
+import Registration from './pages/auth/Registration';
 import Home from './pages/home/Home';
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -18,6 +18,8 @@ const router = createBrowserRouter(
             {/* <Route path='/Registration' element={<Registration/>}   />  */}
             <Route path='*' element={<Error/>}/> 
             <Route path="/" element={<Login  />}/>
+            <Route path="/Registration" element={<Registration/>}/>
+
       </Route>
     
     

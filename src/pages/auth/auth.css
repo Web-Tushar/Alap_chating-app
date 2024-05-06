@@ -16,7 +16,17 @@
 }
 
 .Loginprogramming{
- width: 100%;
- height: 100%;
- object-fit: cover;
+     width: 100%;
+     height: 100%;
+     object-fit: cover;
+}
+
+.subheading{
+     margin-top: 13px;
+     color: #11175D;
+     font-family: Nunito;
+     font-size: 20.641px;
+     font-style: normal;
+     font-weight: 400;
+     line-height: normal;
 }

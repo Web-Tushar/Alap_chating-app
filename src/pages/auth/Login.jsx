@@ -13,6 +13,7 @@ import programming from '../../assets/images/programming.webp';
 
 import "./auth.css";
 import InputBox from '../../utilites/InputBox';
+import { red } from '@mui/material/colors';
 
 
 const BootstrapButton = styled(Button)({
@@ -69,7 +70,7 @@ const Login = () => {
                   Login to Continue
               </BootstrapButton>
               <div style={{marginTop:"35px"}}>
-                <span>Don’t have an account ?<a href="/Registration">Sign up</a></span> 
+                <span>Don’t have an account ?<a href="/Registration" style={{color:"#EA6C00"}}>Sign up</a></span> 
 
               </div>
         </div>
