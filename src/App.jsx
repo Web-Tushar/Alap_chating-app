@@ -9,11 +9,17 @@ import Error from './pages/Error';
 import Rootlayout from './components/layouts/Rootlayout';
 import Registration from './pages/auth/Registration';
 import Home from './pages/home/Home';
+import Notification from './pages/notification/Notification';
+import Setting from './pages/setting/Setting';
+import Message from './pages/message/Message';
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route>
         <Route element={<Rootlayout/>}>
             < Route  path='/Home' element={<Home/>}/>                                        
+            < Route  path='/Notification' element={<Notification/>}/>                                        
+            < Route  path='/message' element={<Message/>}/>                                        
+            < Route  path='/setting' element={<Setting/>}/>                                        
         </Route>
             {/* <Route path='/Registration' element={<Registration/>}   />  */}
             <Route path='*' element={<Error/>}/> 

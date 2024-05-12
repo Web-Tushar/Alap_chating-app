@@ -1,0 +1,66 @@
+.sidebarmain{
+     width: 100%;
+     height: 100vh;
+     padding:  35px 23px 21px 35px; 
+}
+
+.sideinner{
+      background-color: #5F35F5; 
+      width: 100%;
+      height: 100%;
+      border-radius: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 24px 0;
+
+  
+}
+
+.profileimg{
+     display: flex;
+     justify-content: center;
+}
+
+.logout{
+     display: flex;
+     justify-content: center;
+
+}
+.logbtn{
+   padding: 5px;
+   border-radius: 3px;
+   border: none;
+   cursor: pointer;
+}
+
+.navlinkbar{
+     display: flex;
+     justify-content: center;
+}
+
+.nsidebarlist{
+     display: flex;
+     flex-direction: column;
+     row-gap: 40px;
+     color: white;
+}
+
+.nsidebarlist li a svg{
+     color: white;
+     font-size: 30px;
+}
+
+.nsidebarlist li a.active{
+     background-color: white;
+
+}
+.nsidebarlist li a.active svg{
+color: red;
+}
+
+.nsidebarlist li a{
+     display: inline-block;
+     background-color: antiquewhite;
+     padding: 20px 30px;
+}
