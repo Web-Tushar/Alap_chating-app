@@ -17,6 +17,11 @@ import { Link } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import loginvalidation from '../../validation/LoginValidation';
+// import Box from '@mui/material/Box';
+// import Button from '@mui/material/Button';
+// import Typography from '@mui/material/Typography';
+import Modal from '@mui/material/Modal';
+
 // import { red } from '@mui/material/colors';
 
 
@@ -53,6 +58,17 @@ const Loginheading = styled(Typography)({
   
 })
 
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 500,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+};
 
 
 const Login = () => {
@@ -152,12 +168,23 @@ const Login = () => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <Typography id="modal-modal-title" variant="h6" component="h2">
-            Text in a modal
-          </Typography>
-          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-          </Typography>
+            <h2 style={{textAlign:"center", marginBottom:"15px" }}>Forget your password</h2>
+            <div>
+                <InputBox 
+                    type='email' 
+                    name='forgetemail' 
+                    value={formik.values.email} 
+                    id='forgetemail' 
+                    onChange={formik.handleChange} 
+                    variant="outlined" 
+                    placeholder="enter your email"/>
+                    
+              </div>
+              <BootstrapButton style={{textAlign:"center"}} type='submit' variant="contained" disableRipple>
+                
+                   Reset password
+                </BootstrapButton>
+                <button onClick={()=>setOpen(false)}>close</button>
         </Box>
       </Modal>
   </Box>
