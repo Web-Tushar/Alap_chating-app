@@ -10,3 +10,10 @@ ol,ul{
 a{
   text-decoration: none;     
 }
+.cardheading{
+     color: #000;
+     font-family: Poppins;
+     font-size: 20px;
+     font-weight: 600;
+     line-height: normal;
+}

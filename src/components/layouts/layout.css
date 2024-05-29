@@ -56,11 +56,11 @@
 
 }
 .nsidebarlist li a.active svg{
-color: red;
+    color: black;
 }
 
 .nsidebarlist li a{
      display: inline-block;
-     background-color: antiquewhite;
-     padding: 20px 30px;
+     padding: 5px 15px;
+     border-radius: 5px;
 }

@@ -14,6 +14,9 @@ import programming from '../../assets/images/programming.webp';
 import "./auth.css";
 import InputBox from '../../utilites/InputBox';
 import { Link } from 'react-router-dom';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+import loginvalidation from '../../validation/LoginValidation';
 // import { red } from '@mui/material/colors';
 
 
@@ -53,6 +56,27 @@ const Loginheading = styled(Typography)({
 
 
 const Login = () => {
+
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false); 
+
+  const initialValues ={
+      email: '',
+      password: '',
+  }
+
+  const formik = useFormik({
+    initialValues: initialValues, 
+    validationSchema: loginvalidation,
+    
+    onSubmit: (values,actions )=> {
+      console.log(values);
+      actions.resetForm();
+      // alert(JSON.stringify(values, null, 2));
+    },
+
+  });
   return (
     <Box sx={{ flexGrow: 1 }}>
     <Grid container spacing={0}>
@@ -63,13 +87,40 @@ const Login = () => {
             </Loginheading> 
             <Images source={LoginwithGoogle} alt="google" className="LoginwithGoogle"/>
             
-              <div className='inputbox'>
-                  <InputBox variant="standard" placeholder="enter your email"/>
-                  <InputBox variant="standard" placeholder="Enter your password"/>
-              </div>
-              <BootstrapButton variant="contained" disableRipple>
-                  Login to Continue
-              </BootstrapButton>
+            <form onSubmit={formik.handleSubmit} action="">
+                <div className='inputbox'>
+                  <div>
+                      <InputBox 
+                          type='email' 
+                          name='email' 
+                          value={formik.values.email} 
+                          id='email' 
+                          onChange={formik.handleChange} 
+                          variant="standard" 
+                          placeholder="enter your email"/>
+                          {formik.touched.email && formik.errors.email ? (
+                          <div style={{color:"red"}}>{formik.errors.email}</div>
+                        ) : null}
+                  </div>
+                        <div>
+                          <InputBox 
+                          type="password"
+                          name="password" 
+                          value={formik.values.password} 
+                          id="password" 
+                          onChange={formik.handleChange}  
+                          variant="standard" 
+                          placeholder="Enter your password"/>
+                          {formik.touched.password && formik.errors.password ? (
+                          <div style={{color:"red"}}>{formik.errors.password}</div>
+                        ) : null}
+                        </div>
+                </div>
+                <BootstrapButton type='submit' variant="contained" disableRipple>
+                    Login to Continue
+                </BootstrapButton>
+
+            </form> 
               <div style={{marginTop:"35px"}}>
                 <span style={{color: "#03014C", 
                   fontSize:"13.338px", 
@@ -77,6 +128,7 @@ const Login = () => {
                   Don’t have an account ?
                 <Link to="/Registration" style={{color:"#EA6C00"}} >Sign up</Link>
                 </span> 
+                <p onClick={handleOpen} >forget password?</p>
 
               </div>
         </div>
@@ -92,6 +144,22 @@ const Login = () => {
         </div> 
       </Grid>
     </Grid>
+
+    <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <Typography id="modal-modal-title" variant="h6" component="h2">
+            Text in a modal
+          </Typography>
+          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+            Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
+          </Typography>
+        </Box>
+      </Modal>
   </Box>
   )
 }

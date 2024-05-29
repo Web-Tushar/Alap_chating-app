@@ -1,0 +1,53 @@
+.box{
+     width: 344px;
+     height: 451px;
+     border-radius: 20px;
+     background: #FFF;
+     box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+     padding: 20px;
+}
+
+.useritembox{
+     margin-top: 30px;
+     overflow-y: scroll;
+     /* display: flex;
+     flex-direction: column;
+     column-gap: 30px; */
+     height: 346px;
+}
+
+.useritem{
+     width: 100%;
+     background-color: red;
+     height: 50px;
+     margin-bottom: 10px;
+
+}
+/* =======scrolbar style here==== */
+/* width */
+::-webkit-scrollbar {
+     width: 20px;
+   }
+   
+   /* Track */
+   ::-webkit-scrollbar-track {
+     box-shadow: inset 1 1 54px grey; 
+     border-radius: 10px;
+     margin-left: 5px;
+
+   }
+    
+   /* Handle */
+   ::-webkit-scrollbar-thumb {
+     background: rgb(218, 190, 190); 
+     border-radius: 10px;
+   }
+   
+   /* Handle on hover */
+   ::-webkit-scrollbar-thumb:hover {
+     background: #11d864; 
+   }
+
+/* =======scrolbar style here==== */
+
+
