@@ -8,6 +8,11 @@ import InputBox from '../../utilites/InputBox';
 import programming from '../../assets/images/programming.webp';
 import Paragraph from '../../utilites/Paragraph';
 import { Link } from 'react-router-dom';
+import { useFormik } from 'formik';
+import RegistrationValidation from '../../validation/RegistrationValidation';
+import { getAuth, createUserWithEmailAndPassword,sendEmailVerification,updateProfile,signInWithEmailAndPassword } from "firebase/auth";
+import { getDatabase, ref, set } from "firebase/database";
+
 
 
 
@@ -20,9 +25,11 @@ const BootstrapButton = styled(Button)({
   lineHeight: 1.5,
   backgroundColor: '#0063cc',
   borderColor: '#0063cc',
-  marginTop: '55px'
+  marginTop: '30px'
   
 });
+
+
 
 
 
@@ -33,6 +40,57 @@ const Loginheading = styled(Typography)({
 })
 
 const Registration = () => {
+  const db = getDatabase();
+
+  const auth = getAuth();
+
+  const initialValues ={
+    fullName: '',
+    email: '',
+    password: '',
+  }
+  
+  const formik = useFormik({
+  initialValues: initialValues, 
+  validationSchema: RegistrationValidation,
+  
+  onSubmit: (values,actions )=> {
+    // console.log(values);
+    actions.resetForm();
+    createUserWithEmailAndPassword(auth, values.email, values.password)
+    .then((userCredential) => {
+      sendEmailVerification(auth.currentUser)
+      .then(() => {
+        updateProfile(auth.currentUser, {
+          displayName:(values.fullName), 
+        }).then(() => {
+          //  console.log(userCredential.user);
+            set(ref(db, 'users/' + userCredential.user.uid), {
+              displayName: userCredential.user.displayName,
+
+              email: userCredential.user.email,
+              profile_picture : userCredential.user.photoURL,
+            }).then(()=>{
+               console.log("real time database");
+            })
+        }).catch((error) => {
+         console.log("profile a jhamela ace ");
+        });
+          // console.log("mail sent hoyce")
+      });
+      
+    })
+    .catch((error) => {
+      console.log(error);
+      // const errorCode = error.code;
+      // const errorMessage = error.message;
+    });
+
+    // alert(JSON.stringify(values, null, 2));
+  },
+  
+  });
+  
   return (
     <Box sx={{ flexGrow: 1 }}>
     <Grid container spacing={0}>
@@ -43,33 +101,73 @@ const Registration = () => {
             </Loginheading> 
             
             <Paragraph styleing="subheading" text="Free register and you can enjoy it"/>
-            
-              <div className='inputbox'>
-                  <InputBox variant="outlined" placeholder="enter 
-                  your email"/>
-                  <InputBox variant="outlined" placeholder="Full name"/>
-                  <InputBox variant="outlined" placeholder="Enter your password"/>
-                  <FormControl>
-                    <FormLabel id="demo-row-radio-buttons-group-label">Gender</FormLabel>
-                      <RadioGroup
-                        row
-                        aria-labelledby="demo-row-radio-buttons-group-label"
-                        name="row-radio-buttons-group"
-                      >
-                        <FormControlLabel value="female" control={<Radio />} label="Female" />
-                        <FormControlLabel value="male" control={<Radio />} label="Male" />
-                        <FormControlLabel value="other" control={<Radio />} label="Other" />
-                          
-                       
-                      </RadioGroup>
-                  </FormControl>
 
-              </div>
+              <form action="" onSubmit={formik.handleSubmit}>
+                  <div className='inputbox'>
+                  <div>
+                      
+                      <InputBox 
+                            type='text' 
+                            name='fullName' 
+                            id='fullName' 
+                            value={formik.values.fullName} 
+                            onChange={formik.handleChange} 
+                            variant="outlined" 
+                            placeholder="Full name"/>
+                            {formik.touched.fullName && formik.errors.fullName ? (
+                           <div style={{color:"red"}}>{formik.errors.fullName}</div>
+                           ) : null}  
+                  </div>
+                    <div>
+                        <InputBox 
+                            type='email' 
+                            name='email' 
+                            value={formik.values.email} 
+                            id='email' 
+                            onChange={formik.handleChange} 
+                            variant="outlined" 
+                            placeholder="enter your email"/>
+                            {formik.touched.email && formik.errors.email ? (
+                          <div style={{color:"red"}}>{formik.errors.email}</div>
+                        ) : null}
+                    </div>
                   
+                    <div>
 
-              <BootstrapButton variant="contained" disableRipple>
-                Sign up
-              </BootstrapButton>
+                    </div>
+                        
+                        <InputBox 
+                             type='password' 
+                             name='password' 
+                             id='password' 
+                             value={formik.values.password} 
+                             onChange={formik.handleChange} 
+                             variant="outlined" 
+                             placeholder="Enter your password"/> 
+                             {formik.touched.password && formik.errors.password ? (
+                             <div style={{color:"red"}}>{formik.errors.password}</div>
+                             ) : null} 
+
+                      <FormControl>
+                        <FormLabel id="demo-row-radio-buttons-group-label">Gender</FormLabel>
+                          <RadioGroup
+                            row
+                            aria-labelledby="demo-row-radio-buttons-group-label"
+                            name="row-radio-buttons-group"
+                          >
+                            <FormControlLabel value="female" control={<Radio />} label="Female" />
+                            <FormControlLabel value="male" control={<Radio />} label="Male" />
+                            <FormControlLabel value="other" control={<Radio />} label="Other" />
+                              
+                          
+                          </RadioGroup>
+                      </FormControl>
+                  </div>
+                  <BootstrapButton type='submit' variant="contained" disableRipple>
+                    Sign up
+                  </BootstrapButton>
+
+              </form>
               <div style={{marginTop:"35px"}}>
                 <span 
                   style={{color: "#03014C", 

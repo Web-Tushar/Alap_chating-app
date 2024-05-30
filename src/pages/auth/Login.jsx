@@ -2,10 +2,8 @@ import React from 'react';
 import { styled } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
-// import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
-// import TextField from '@mui/material/TextField';
 import { Typography } from '@mui/material';
 import Images from '../../utilites/Images';
 import LoginwithGoogle from '../../assets/images/Google(1).webp';
@@ -15,15 +13,10 @@ import "./auth.css";
 import InputBox from '../../utilites/InputBox';
 import { Link } from 'react-router-dom';
 import { useFormik } from 'formik';
-import * as Yup from 'yup';
+// import * as Yup from 'yup';
 import loginvalidation from '../../validation/LoginValidation';
-// import Box from '@mui/material/Box';
-// import Button from '@mui/material/Button';
-// import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
-
-// import { red } from '@mui/material/colors';
-
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
 const BootstrapButton = styled(Button)({
   boxShadow: 'none',
@@ -73,6 +66,8 @@ const style = {
 
 const Login = () => {
 
+  const auth = getAuth();
+
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false); 
@@ -87,8 +82,20 @@ const Login = () => {
     validationSchema: loginvalidation,
     
     onSubmit: (values,actions )=> {
-      console.log(values);
+      // console.log(values);
       actions.resetForm();
+      signInWithEmailAndPassword(auth, values.email, values.password)
+        .then((userCredential) => {
+          // Signed in 
+          const user = userCredential.user;
+          console.log(user);
+          // ...
+        })
+        .catch((error) => {
+          // const errorCode = error.code;
+          // const errorMessage = error.message;
+          console.log(error);
+        });
       // alert(JSON.stringify(values, null, 2));
     },
 
