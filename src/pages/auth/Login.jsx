@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { styled } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
@@ -17,6 +17,11 @@ import { useFormik } from 'formik';
 import loginvalidation from '../../validation/LoginValidation';
 import Modal from '@mui/material/Modal';
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { ToastContainer, toast } from 'react-toastify';
+import { useNavigate } from "react-router-dom";
+import { FaSleigh } from 'react-icons/fa';
+import { ThreeDots } from 'react-loader-spinner';
+
 
 const BootstrapButton = styled(Button)({
   boxShadow: 'none',
@@ -67,10 +72,15 @@ const style = {
 const Login = () => {
 
   const auth = getAuth();
+  const navigate = useNavigate();
+
 
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false); 
+
+
+  const [loader, setLoader] = useState  (false)
 
   const initialValues ={
       email: '',
@@ -83,25 +93,47 @@ const Login = () => {
     
     onSubmit: (values,actions )=> {
       // console.log(values);
-      actions.resetForm();
       signInWithEmailAndPassword(auth, values.email, values.password)
         .then((userCredential) => {
           // Signed in 
           const user = userCredential.user;
-          console.log(user);
+          if(user.emailVerified){
+            toast("email varified")
+            actions.resetForm();
+            navigate("/home")
+          }else{
+            toast("pleas your email varify")
+          }
+
+          console.log(user.emailVerified);
+          
+
           // ...
         })
         .catch((error) => {
           // const errorCode = error.code;
           // const errorMessage = error.message;
           console.log(error);
-        });
+            toast("invalide Credential!");
+        });   
       // alert(JSON.stringify(values, null, 2));
     },
 
   });
   return (
     <Box sx={{ flexGrow: 1 }}>
+      <ToastContainer
+          position="top-right"
+          autoClose={1000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="dark"
+      />
     <Grid container spacing={0}>
       <Grid item xs={6} style={{display:'flex', alignItems:'center', justifyContent:'center'}}>
         <div>
@@ -139,8 +171,18 @@ const Login = () => {
                         ) : null}
                         </div>
                 </div>
-                <BootstrapButton type='submit' variant="contained" disableRipple>
+                <BootstrapButton loading={loader} type='submit' variant="contained" disableRipple>
                     Login to Continue
+                   <ThreeDots
+                      visible={true}
+                      height="80"
+                      width="80"
+                      color="#4fa94d"
+                      radius="9"
+                      ariaLabel="three-dots-loading"
+                      wrapperStyle={{}}
+                      wrapperClass=""
+                      />
                 </BootstrapButton>
 
             </form> 
