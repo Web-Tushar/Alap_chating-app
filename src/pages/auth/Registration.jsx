@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import { styled } from '@mui/material/styles';
@@ -12,6 +12,9 @@ import { useFormik } from 'formik';
 import RegistrationValidation from '../../validation/RegistrationValidation';
 import { getAuth, createUserWithEmailAndPassword,sendEmailVerification,updateProfile,signInWithEmailAndPassword } from "firebase/auth";
 import { getDatabase, ref, set } from "firebase/database";
+import { ToastContainer, toast } from 'react-toastify';
+import { Puff } from 'react-loader-spinner';
+import { useNavigate } from "react-router-dom";
 
 
 
@@ -38,24 +41,36 @@ const Loginheading = styled(Typography)({
   fontSize: '33px',
 
 })
+// function start here===========//
 
 const Registration = () => {
-  const db = getDatabase();
 
+  const db = getDatabase();
   const auth = getAuth();
+
+  const [loading, setLoading] = useState(false)
+  const navigate = useNavigate();
+
+
+
 
   const initialValues ={
     fullName: '',
     email: '',
     password: '',
   }
+
+
   
   const formik = useFormik({
   initialValues: initialValues, 
   validationSchema: RegistrationValidation,
+
+  
   
   onSubmit: (values,actions )=> {
     // console.log(values);
+    setLoading(true)
     actions.resetForm();
     createUserWithEmailAndPassword(auth, values.email, values.password)
     .then((userCredential) => {
@@ -71,16 +86,27 @@ const Registration = () => {
               email: userCredential.user.email,
               profile_picture : userCredential.user.photoURL,
             }).then(()=>{
-               console.log("real time database");
+              //  console.log("real time database creat hoyece");
+              
+                toast("reigistration Successfull");
+                setLoading(false)
+                setTimeout(() => {
+                  navigate("/")
+                }, 2000);
+                  
             })
         }).catch((error) => {
-         console.log("profile a jhamela ace ");
+          setLoading(false)
+          console.log("profile a jhamela ace ");
+
         });
           // console.log("mail sent hoyce")
       });
       
     })
     .catch((error) => {
+      setLoading(false)
+
       console.log(error);
       // const errorCode = error.code;
       // const errorMessage = error.message;
@@ -90,9 +116,46 @@ const Registration = () => {
   },
   
   });
+
+  
+
+
   
   return (
-    <Box sx={{ flexGrow: 1 }}>
+    
+  <>
+  { loading &&
+      <div className='loading_wrapper'>
+          <Puff
+          visible={true}
+          height="320" 
+          width="320"
+          color="#fff"
+          ariaLabel="puff-loading"
+          wrapperStyle={{}}
+          wrapperClass=""
+          />
+      </div>
+
+  
+  }
+
+    <Box sx={{ flexGrow: 1 }}> 
+
+          <ToastContainer
+            position="top-right"
+            autoClose={2000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="dark"
+            // transition: Bounce,x`
+         />
+
     <Grid container spacing={0}>
       <Grid item xs={6} style={{display:'flex',  alignItems:'center', justifyContent:'center'}}>
         <div>
@@ -191,7 +254,8 @@ const Registration = () => {
         </div> 
       </Grid>
     </Grid>
-  </Box>
+    </Box>
+  </>
   )
 }
 

@@ -8,7 +8,7 @@ const emailregex =     /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\
 const RegistrationValidation = Yup.object({
      fullName:  Yup.string()
                .required('pleas enter your fullname')
-               .max(10, 'Must be 10 characters or less')
+               .max(20, 'Must be 20 characters or less')
                .min(5, 'Must be 5 characters deta hobe '),
 
 
