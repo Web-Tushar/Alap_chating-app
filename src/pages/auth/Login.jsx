@@ -16,7 +16,7 @@ import { useFormik } from 'formik';
 // import * as Yup from 'yup';
 import loginvalidation from '../../validation/LoginValidation';
 import Modal from '@mui/material/Modal';
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { getAuth, signInWithEmailAndPassword,sendPasswordResetEmail,GoogleAuthProvider,signInWithPopup } from "firebase/auth";
 import { ToastContainer, toast } from 'react-toastify';
 import { useNavigate } from "react-router-dom";
 import { FaSleigh } from 'react-icons/fa';
@@ -81,6 +81,8 @@ const Login = () => {
 
 
   const [loader, setLoader] = useState  (false)
+  const [forgetemail,setforgetEmail] = useState("")
+  const provider = new GoogleAuthProvider();
 
   const initialValues ={
       email: '',
@@ -93,16 +95,22 @@ const Login = () => {
     
     onSubmit: (values,actions )=> {
       // console.log(values);
+      setLoader(true)
       signInWithEmailAndPassword(auth, values.email, values.password)
         .then((userCredential) => {
           // Signed in 
           const user = userCredential.user;
           if(user.emailVerified){
+            localStorage.setItem("loggeduser",JSON.stringify(user)) 
             toast("email varified")
             actions.resetForm();
             navigate("/home")
+            setLoader(false)
+
           }else{
             toast("pleas your email varify")
+            setLoader(false)
+
           }
 
           console.log(user.emailVerified);
@@ -115,11 +123,50 @@ const Login = () => {
           // const errorMessage = error.message;
           console.log(error);
             toast("invalide Credential!");
+            setTimeout(() => {
+              setLoader(false)
+              
+            }, 2000);
+
         });   
       // alert(JSON.stringify(values, null, 2));
     },
 
   });
+  let handleForgetPass = ()=>{
+      console.log(forgetemail);
+      sendPasswordResetEmail(auth, forgetemail)
+      .then(() => {
+      toast("forget email sent hoyce")
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        // ..
+      });
+
+  }
+  
+  let handleGoogleLogin =()=>{
+
+    signInWithPopup(auth, provider)
+    .then((result) => {
+      const credential = GoogleAuthProvider.credentialFromResult(result);
+      const token = credential.accessToken;
+      const user = result.user;
+      console.log(result);
+      // ...
+    }).catch((error) => {
+      // Handle Errors here.
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      // The email of the user's account used.
+      const email = error.customData.email;
+      // The AuthCredential type that was used.
+      const credential = GoogleAuthProvider.credentialFromError(error);
+      // ...
+    });
+  }
   return (
     <Box sx={{ flexGrow: 1 }}>
       <ToastContainer
@@ -140,7 +187,7 @@ const Login = () => {
             <Loginheading variant="h4">
                 Login to your account!
             </Loginheading> 
-            <Images source={LoginwithGoogle} alt="google" className="LoginwithGoogle"/>
+            <Images onClick={handleGoogleLogin} source={LoginwithGoogle} alt="google" className="LoginwithGoogle"/>
             
             <form onSubmit={formik.handleSubmit} action="">
                 <div className='inputbox'>
@@ -171,18 +218,27 @@ const Login = () => {
                         ) : null}
                         </div>
                 </div>
-                <BootstrapButton loading={loader} type='submit' variant="contained" disableRipple>
-                    Login to Continue
-                   <ThreeDots
-                      visible={true}
-                      height="80"
-                      width="80"
-                      color="#4fa94d"
-                      radius="9"
-                      ariaLabel="three-dots-loading"
-                      wrapperStyle={{}}
-                      wrapperClass=""
-                      />
+                <BootstrapButton disabled={loader} type='submit' variant="contained" disableRipple>
+                    
+                    { 
+                    
+                      loader ?
+                        <ThreeDots
+                         visible={true}
+                         height="40"
+                         width="80"
+                         color="#fff"
+                         radius="9"
+                         ariaLabel="three-dots-loading"
+                         wrapperStyle={{}}
+                         wrapperClass=""
+                         />
+                         :
+                      "Login to Continue"
+                    }
+                       
+
+
                 </BootstrapButton>
 
             </form> 
@@ -222,14 +278,18 @@ const Login = () => {
                 <InputBox 
                     type='email' 
                     name='forgetemail' 
-                    value={formik.values.email} 
+                    // value={formik.values.email} 
                     id='forgetemail' 
-                    onChange={formik.handleChange} 
+                    // onChange={formik.handleChange} 
                     variant="outlined" 
-                    placeholder="enter your email"/>
+                    placeholder="forget your email"
+                    styleing="emailbox"
+                    onChange={(e)=>setforgetEmail(e.target.value)}
+
+                    />
                     
               </div>
-              <BootstrapButton style={{textAlign:"center"}} type='submit' variant="contained" disableRipple>
+              <BootstrapButton  onClick={handleForgetPass} style={{textAlign:"center"}} type='submit' variant="contained" disableRipple>
                 
                    Reset password
                 </BootstrapButton>
