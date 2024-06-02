@@ -77,12 +77,12 @@ const Registration = () => {
       sendEmailVerification(auth.currentUser)
       .then(() => {
         updateProfile(auth.currentUser, {
-          displayName:(values.fullName), 
+          displayName: values.fullName,
+          photoURL: "https://example.com/jane-q-user/profile.jpg" 
         }).then(() => {
-          //  console.log(userCredential.user);
+           console.log("updateProfile");
             set(ref(db, 'users/' + userCredential.user.uid), {
               displayName: userCredential.user.displayName,
-
               email: userCredential.user.email,
               profile_picture : userCredential.user.photoURL,
             }).then(()=>{

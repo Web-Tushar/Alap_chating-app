@@ -19,8 +19,10 @@ import Modal from '@mui/material/Modal';
 import { getAuth, signInWithEmailAndPassword,sendPasswordResetEmail,GoogleAuthProvider,signInWithPopup } from "firebase/auth";
 import { ToastContainer, toast } from 'react-toastify';
 import { useNavigate } from "react-router-dom";
-import { FaSleigh } from 'react-icons/fa';
+// import { FaSleigh } from 'react-icons/fa';
 import { ThreeDots } from 'react-loader-spinner';
+import { useSelector, useDispatch } from 'react-redux';
+import { logedinUser } from '../../Slice/authSlice';
 
 
 const BootstrapButton = styled(Button)({
@@ -50,6 +52,8 @@ const Item = styled(Paper)(({ theme }) => ({
   textAlign: 'center',
   color: theme.palette.text.secondary,
 }));
+
+
 const Loginheading = styled(Typography)({
       Color:'#03014C',
       fontSize: '33px',
@@ -74,20 +78,23 @@ const Login = () => {
   const auth = getAuth();
   const navigate = useNavigate();
 
+  const data = useSelector((state) => state.logedinUserData.value) 
+console.log(data);
 
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false); 
 
-
   const [loader, setLoader] = useState  (false)
   const [forgetemail,setforgetEmail] = useState("")
   const provider = new GoogleAuthProvider();
+  const dispatch = useDispatch()
 
   const initialValues ={
       email: '',
       password: '',
   }
+
 
   const formik = useFormik({
     initialValues: initialValues, 
@@ -102,8 +109,9 @@ const Login = () => {
           const user = userCredential.user;
           if(user.emailVerified){
             localStorage.setItem("loggeduser",JSON.stringify(user)) 
+            dispatch(logedinUser(user))
             toast("email varified")
-            actions.resetForm();
+            // actions.resetForm();
             navigate("/home")
             setLoader(false)
 
