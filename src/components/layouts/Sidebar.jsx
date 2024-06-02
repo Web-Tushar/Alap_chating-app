@@ -1,6 +1,6 @@
 import React from 'react'
 import "./layout.css"
-import { Avatar, Skeleton } from '@mui/material'
+import { Avatar } from '@mui/material'
 import { NavLink } from 'react-router-dom'
 import { IoMdHome } from "react-icons/io";
 import { AiFillMessage } from "react-icons/ai";
@@ -10,19 +10,20 @@ import { getAuth, signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux';
 import {logedinUser} from '../../Slice/authSlice';
+import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
-// import Skeleton from 'react-loading-skeleton';
 
 
 const Sidebar = () => {
   const navigate = useNavigate();
   const auth = getAuth();
-  const data = useSelector((state) => state.logedinUserData.value) 
+  const data = useSelector((state) => state?.logedinUserData?.value) 
+  // console.log(data);
   const dispatch = useDispatch()
   const handleloginbtn =()=>{
         signOut(auth).then(() => {
         navigate("/")
-        localStorage.removeItem("");
+        localStorage.removeItem("loggedUser");
         dispatch(logedinUser(null));
       }).catch((error) => {
         // An error happened.
@@ -35,23 +36,28 @@ const Sidebar = () => {
       <div className='sideinner'>
         <div className='profileimg'>
             <Avatar
-              alt="tushar"
+              alt={data.displayName}
+              // alt="tushar"
+
               src="/static/images/avatar/1.jpg"
               sx={{ width: 100, height: 100 }}
             />
-            {
-                data ?
+            
+            
+                 
+            <Skeleton style={{width:"70px", margin:"0 auto", height: "10px" , color:"red"}}/>
+                 
                 <p style={{
                   textAlign:'center',
                   color:"white", 
                   padding:"10px 0"}}>
-                    
-                     {data.displayName}
+                    {data?.displayName}
                   </p>
-                  : ""
+                
                   
-            }
-            {/* {console.log(data)} */}
+            
+            
+        
         </div>
         <div style={{width:"100%"}} className='navlinkbar'>
           

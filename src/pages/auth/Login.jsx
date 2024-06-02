@@ -79,7 +79,7 @@ const Login = () => {
   const navigate = useNavigate();
 
   const data = useSelector((state) => state.logedinUserData.value) 
-console.log(data);
+// console.log(data);
 
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
@@ -108,7 +108,7 @@ console.log(data);
           // Signed in 
           const user = userCredential.user;
           if(user.emailVerified){
-            localStorage.setItem("loggeduser",JSON.stringify(user)) 
+            localStorage.setItem("loggedUser",JSON.stringify(user)) 
             dispatch(logedinUser(user))
             toast("email varified")
             // actions.resetForm();
