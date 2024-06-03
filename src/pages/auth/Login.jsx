@@ -16,7 +16,7 @@ import { useFormik } from 'formik';
 // import * as Yup from 'yup';
 import loginvalidation from '../../validation/LoginValidation';
 import Modal from '@mui/material/Modal';
-import { getAuth, signInWithEmailAndPassword,sendPasswordResetEmail,GoogleAuthProvider,signInWithPopup } from "firebase/auth";
+import { getAuth, signInWithEmailAndPassword,sendPasswordResetEmail,GoogleAuthProvider,signInWithPopup,signOut } from "firebase/auth";
 import { ToastContainer, toast } from 'react-toastify';
 import { useNavigate } from "react-router-dom";
 // import { FaSleigh } from 'react-icons/fa';
@@ -89,6 +89,8 @@ const Login = () => {
   const [forgetemail,setforgetEmail] = useState("")
   const provider = new GoogleAuthProvider();
   const dispatch = useDispatch()
+  
+
 
   const initialValues ={
       email: '',
@@ -118,7 +120,11 @@ const Login = () => {
           }else{
             toast("pleas your email varify")
             setLoader(false)
-
+            signOut(auth).then(() => {
+              
+            }).catch((error) => {
+              // An error happened.
+            });
           }
 
           console.log(user.emailVerified);
@@ -159,10 +165,24 @@ const Login = () => {
 
     signInWithPopup(auth, provider)
     .then((result) => {
-      const credential = GoogleAuthProvider.credentialFromResult(result);
-      const token = credential.accessToken;
       const user = result.user;
-      console.log(result);
+      if(user.emailVerified){
+        localStorage.setItem("loggedUser",JSON.stringify(user)) 
+        dispatch(logedinUser(user))
+        toast("email varified")
+        // actions.resetForm();
+        navigate("/home")
+        setLoader(false)
+
+      }else{
+        toast("pleas your email varify")
+        setLoader(false)
+        signOut(auth).then(() => {
+          
+        }).catch((error) => {
+          // An error happened.
+        });
+      }
       // ...
     }).catch((error) => {
       // Handle Errors here.

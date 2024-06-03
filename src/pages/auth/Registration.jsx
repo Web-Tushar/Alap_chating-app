@@ -107,7 +107,9 @@ const Registration = () => {
     .catch((error) => {
       setLoading(false)
 
-      console.log(error);
+      // console.log(error);
+      toast(" email already in use");
+
       // const errorCode = error.code;
       // const errorMessage = error.message;
     });
