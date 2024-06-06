@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { styled } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
@@ -160,6 +160,14 @@ const Login = () => {
       });
 
   }
+
+  useEffect(()=>{
+if(data){
+  navigate("/home")
+}else{
+  navigate("/")
+}
+  },[])
   
   let handleGoogleLogin =()=>{
 

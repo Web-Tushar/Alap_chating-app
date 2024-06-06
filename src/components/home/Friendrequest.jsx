@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import CardHeading from '../../utilites/CardHeading'
-import { getDatabase, ref, onValue, set, push } from "firebase/database";
+import { getDatabase, ref, onValue, set, push,remove } from "firebase/database";
 import { useSelector, useDispatch } from 'react-redux';
+// import { IoHandLeft } from 'react-icons/io5';
+import { Alert } from '@mui/material';
 
 
 const Friendrequest = () => {
@@ -29,12 +31,41 @@ const Friendrequest = () => {
    });
  
  },[])
- 
+
+
+//  friend request delete
+const HandlfRequest = (handleinfo)=>{
+  // console.log(handleinfo);
+  remove(ref(db,"friendRequest/" + handleinfo.id)).then(()=>{
+  
+  })
+}
+  // confirm request====
+
+const handleReqConfirm =(confirminfo)=>{
+  console.log(confirminfo);
+  // console.log(confirmrequest);
+  set(push(ref(db, 'Friends ')),{
+    senderid: confirminfo.whosendid,
+    senderemail: confirminfo.whosendemail,
+    sendername: confirminfo.whosendName,
+    receiverid: confirminfo.whoreceivedid,
+    receiveremail: confirminfo.whoreceivedemail,
+    recivername: confirminfo.whoreceivedName,
+}).then(()=>{
+  remove(ref(db,"friendRequest/" + confirminfo.id)).then(()=>{
+   console.log("delete done");
+  })
+})
+
+}
   return (
      <div className="box">
      <CardHeading text="Friend Request "/>
           <div className='useritembox'>
-              {friendRequestList.map((item,index)=>(
+            
+              {friendRequestList.length > 0 ?
+              friendRequestList.map((item,index)=>(
                 <div key={index} className="useritem">
                     <div className='imgbox'></div>
                     <div className='userinfo'>
@@ -43,12 +74,14 @@ const Friendrequest = () => {
                         <p>mern stack 2306</p>
                       </div>
                       <div>
-                         <button>Confirm</button>
-                         <button>Delete</button>
+                         <button onClick={()=>handleReqConfirm(item)}>Confirm</button>
+                         <button onClick={()=>HandlfRequest(item)}>Delete</button>
                       </div>
                     </div>
                 </div>
                ))
+               :
+               <Alert severity="info">No Request Found</Alert>                  
               }
           </div>
     </div>

@@ -1,6 +1,7 @@
 import React from 'react'
 import UserList from '../../components/home/UserList'
 import Friendrequest from '../../components/home/Friendrequest'
+import Friends from '../../components/home/Friends'
 
 const Home = () => {
   return (
@@ -11,6 +12,9 @@ const Home = () => {
         </div>
         <div>
           <Friendrequest/>
+        </div>
+        <div>
+          <Friends/>
         </div>
 
     </div>
