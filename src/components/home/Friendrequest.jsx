@@ -36,7 +36,7 @@ const Friendrequest = () => {
 //  friend request delete
 const HandlfRequest = (handleinfo)=>{
   // console.log(handleinfo);
-  remove(ref(db,"friendRequest/" + handleinfo.id)).then(()=>{
+  remove(ref(db,"friendRequest " + handleinfo.id)).then(()=>{
   
   })
 }
@@ -45,16 +45,16 @@ const HandlfRequest = (handleinfo)=>{
 const handleReqConfirm =(confirminfo)=>{
   console.log(confirminfo);
   // console.log(confirmrequest);
-  set(push(ref(db, 'Friends ')),{
+  set(push(ref(db, 'friends ')),{
     senderid: confirminfo.whosendid,
     senderemail: confirminfo.whosendemail,
     sendername: confirminfo.whosendName,
-    receiverid: confirminfo.whoreceivedid,
-    receiveremail: confirminfo.whoreceivedemail,
-    recivername: confirminfo.whoreceivedName,
+    receiverid: data.uid,
+    receiveremail: data.email,
+    recivername: data.displayName ,
 }).then(()=>{
   remove(ref(db,"friendRequest/" + confirminfo.id)).then(()=>{
-   console.log("delete done");
+   console.log("confirm done");
   })
 })
 
