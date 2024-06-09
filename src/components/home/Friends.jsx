@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import CardHeading from '../../utilites/CardHeading';
 import { Alert } from '@mui/material';
-import { getDatabase, ref, onValue,} from "firebase/database";
-import { useSelector } from 'react-redux'; 
+import { getDatabase, ref, onValue,  } from "firebase/database";
+import { useSelector, useDispatch } from 'react-redux'; 
 
 const Friends = () => {
 
@@ -16,35 +16,63 @@ const Friends = () => {
     let arr = []
     snapshot.forEach((item)=>{
       
+      
+      if(item.val().senderid == data.uid ||  item.val().receiverid == data.uid){
       arr.push({...item.val(), id: item.key})
-      // if(item.key != data.uid){
 
-      // }
+      }
     }) 
      setFriendsList(arr);
-    });
-    },[])
-    console.log(friendsList);
+     });
+     },[])
+      console.log(friendsList);
+
+      const handleBlock = (blockinfo) =>{
+        set(push(ref(db, 'block')),{
+                // blockkhaiceid: blockinfo.receiverid,
+                // blockkhaiceemail: blockinfo
+                // blockkhaicename: blockinfo
+                // blockdecaid: blockinfo
+                // blockdecaemail: blockinfo
+                // blockdecaname: blockinfo
+            })
+        console.log(blockinfo);
+
+      }
 
   return (
     
      <div className="box">
      <CardHeading text="Friend List "/>
           <div className='useritembox'>
-                <div className="useritem">
+            {
+              friendsList.length > 0
+              ?friendsList.map((item,index)=>(
+                <div key={index} className="useritem">
                     <div className='imgbox'></div>
                     <div className='userinfo'>
                       <div>
-                        <h4>.khlouho</h4>
+                        <h4>{item.receiverid == data.uid
+                        ?
+                        item.sendername
+                        :
+                        item.receivername
+                          
+                           }</h4>
                         <p>mern stack 2306</p>
                       </div>
                       <div>
-                         <button>block</button>
+                         <button>unfriend</button>
+                         <button onClick={()=>handleBlock(item)}>block</button>
                          
                       </div>
                     </div>
                 </div>  
+
+              ))
+              :
                 <Alert severity="info"> Friends Found</Alert>                 
+            }
           </div>
     </div>
   )

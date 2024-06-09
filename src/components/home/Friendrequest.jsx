@@ -36,22 +36,23 @@ const Friendrequest = () => {
 //  friend request delete
 const HandlfRequest = (handleinfo)=>{
   // console.log(handleinfo);
-  remove(ref(db,"friendRequest " + handleinfo.id)).then(()=>{
+  remove(ref(db,"friendRequest/" + handleinfo.id)).then(()=>{
   
   })
+  console.log(handleinfo);
 }
   // confirm request====
 
 const handleReqConfirm =(confirminfo)=>{
   console.log(confirminfo);
   // console.log(confirmrequest);
-  set(push(ref(db, 'friends ')),{
+  set(push(ref(db, 'friends')),{
     senderid: confirminfo.whosendid,
     senderemail: confirminfo.whosendemail,
     sendername: confirminfo.whosendName,
     receiverid: data.uid,
     receiveremail: data.email,
-    recivername: data.displayName ,
+    recivername: data.displayName,
 }).then(()=>{
   remove(ref(db,"friendRequest/" + confirminfo.id)).then(()=>{
    console.log("confirm done");
@@ -61,7 +62,7 @@ const handleReqConfirm =(confirminfo)=>{
 }
   return (
      <div className="box">
-     <CardHeading text="Friend Request "/>
+     <CardHeading text="Friend Request"/>
           <div className='useritembox'>
             
               {friendRequestList.length > 0 ?
@@ -70,7 +71,7 @@ const handleReqConfirm =(confirminfo)=>{
                     <div className='imgbox'></div>
                     <div className='userinfo'>
                       <div>
-                        <h4>{item.whosendName }</h4>
+                        <h4>{item.displayName}</h4>
                         <p>mern stack 2306</p>
                       </div>
                       <div>

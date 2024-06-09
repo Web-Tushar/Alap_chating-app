@@ -15,30 +15,32 @@ import Notification from './pages/notification/Notification';
 import Setting from './pages/setting/Setting';
 import Message from './pages/message/Message';
 import IsLogedinuser from './privatRoute/IsLogedinuser';
-const router = createBrowserRouter(
-  createRoutesFromElements(
-    <Route>
-      <Route element={<IsLogedinuser/>}>
-            <Route element={<Rootlayout/>}>
-                < Route  path='/Home' element={<Home/>}/>                                        
-                < Route  path='/Notification' element={<Notification/>}/>                                        
-                < Route  path='/message' element={<Message/>}/>                                        
-                < Route  path='/setting' element={<Setting/>}/>                                        
-            </Route>
+import Profile from './pages/profile/Profile';
 
-      </Route>
-            {/* <Route path='/Registration' element={<Registration/>}   />  */}
-            <Route path='*' element={<Error/>}/> 
-            <Route path="/" element={<Login  />}/>
-            <Route path="/Registration" element={<Registration/>}/>
-
-      </Route>
-    
-    
-  )
-);
 function App() {
 
+  const router = createBrowserRouter(
+    createRoutesFromElements(
+      <Route>
+           <Route element={<IsLogedinuser/>}>
+              <Route element={<Rootlayout/>}>
+                  < Route  path='/Home' element={<Home/>}/>                                        
+                  < Route  path='/Notification' element={<Notification/>}/>                                        
+                  < Route  path='/message' element={<Message/>}/>                                        
+                  < Route  path='/setting' element={<Setting/>}/> 
+                  < Route   path='/profile/:id' element={<Profile/>}/>                                       
+              </Route>
+            </Route>
+              {/* <Route path='/Registration' element={<Registration/>}   />  */}
+              <Route path='*' element={<Error/>}/> 
+              <Route path="/" element={<Login  />}/>
+              <Route path="/Registration" element={<Registration/>}/>
+  
+        </Route>
+      
+      
+    )
+  );
 
   return (
     <>  <RouterProvider

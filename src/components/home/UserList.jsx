@@ -4,12 +4,14 @@ import CardHeading from '../../utilites/CardHeading'
 import { getDatabase, ref, onValue, set, push } from "firebase/database";
 import { useSelector, useDispatch } from 'react-redux';
 import { Alert } from '@mui/material';
+import { Link } from 'react-router-dom';
 
 
   const UserList = () => {    
   const db = getDatabase();
   const [usersList,setUsersList] = useState([ ])
   const [freqaList,setfreqList] = useState([])
+  const [friends,setfriends] = useState([])
   const data = useSelector((state) => state.logedinUserData.value) 
   
 
@@ -22,14 +24,11 @@ import { Alert } from '@mui/material';
       
       if(item.key != data.uid){
         arr.push({...item.val(), id: item.key})
-
-      }
-    }) 
-    setUsersList(arr);
-      
-  });
-
-},[])
+        }
+      }) 
+      setUsersList(arr);
+      });
+    },[])      
 // console.log(usersList);
 
 // ===friendrequestlist
@@ -48,6 +47,24 @@ import { Alert } from '@mui/material';
   });
 
 },[])
+
+//friends list
+
+useEffect(()=>{
+  const usersRef = ref(db, 'friends');
+  onValue(usersRef, (snapshot) => {
+  let arr= []
+  snapshot.forEach((item)=>{
+    
+    if(item.val().senderid == data.uid ||  item.val().receiverid == data.uid){
+      arr.push(item.val().senderid + item.val().receiverid)
+      }
+    }) 
+    setfriends(arr);
+    });
+  },[])
+  console.log(friends)
+
 
 
 let handleFriendRequest = (frequest) =>{
@@ -80,14 +97,21 @@ let handleFriendRequest = (frequest) =>{
                     <div className='imgbox'></div>
                     <div className='userinfo'>
                       <div>
-                        <h4>{item.displayName}</h4>
+                        <Link to={`/profile/${item.id}`}>
+                          <h4>{item.displayName}</h4>
+                         </Link>
                         <p>mern stack 2306</p>
                       </div>
                       { freqaList.includes(data.uid + item.id)  || freqaList.includes(item.id + data.uid)
                       ?
                        <button >Cancel</button>
                       :
-                      <button onClick={()=>handleFriendRequest(item)}>Add</button>
+                        friends.includes(data.uid + item.id) || friends.includes(item.id + data.uid)
+                        ? 
+                        <button>Friends</button>
+                        :
+                        <button onClick={()=>handleFriendRequest(item)}>Add</button>
+
                       
                       }
                     </div>

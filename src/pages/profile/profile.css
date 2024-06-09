@@ -1,0 +1,21 @@
+.coverphoto{
+     width: 95%;
+     height: 300px;
+     background-color: blueviolet;
+     border-radius: 8px;
+     /* margin-right: 25px; */
+     margin-top: 30px;
+}
+
+.profilephoto{
+     /* margin-top: 20px; */
+     width: 120px;
+     height: 120px;
+     background-color: aquamarine;
+     border-radius: 50%; 
+     border: 3px solid green;
+
+}
+.profileinfo{
+     
+}
