@@ -1,10 +1,14 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
 
 const Msgbox = () => {
   const data = useSelector((state) => state.logedinUserData.value)
   const activeChatdata = useSelector((state) => state.activeChatUser.value)
-   console.log(activeChatdata);
+  //  console.log(activeChatdata);
+  const[msgText,setMsgText] =  useState("")
+  const handleSubmitMsg = ()=>{
+    console.log(msgText);
+  }
   return (
     <>
     {/* { activeChatdata ?
@@ -57,19 +61,34 @@ const Msgbox = () => {
                     
               </div>
               <div className='msgbody'>
-                <div style={{display:"flex", justifyContent:"end", backgroundColor:"green",}} >
+                <div style={{display:"flex", justifyContent:"end", padding:"5px"}} >
                   <p className='sendmsg'>hello</p>  
                 </div>
-                <div>
+                <div style={{padding:"5px"}}>
                   <p className='receivemsg'>hello</p>
                 </div>
+                <div style={{display:"flex", justifyContent:"end", padding:"5px"}} >
+                  <p className='sendmsg'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sint unde doloremque saepe qui, ducimus sequi ipsam dicta distinctio debitis reiciendis! Aspernatur, voluptas numquam a perspiciatis sint ipsa dolorem dignissimos saepe, temporibus impedit nulla ducimus? Omnis numquam tempora iusto, officiis nulla obcaecati, totam a dolorum tempore assumenda provident impedit voluptas autem. </p>  
+                </div>
 
+                <div style={{ padding:"5px"}}>
+                  <p className='receivemsg'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore dicta maxime dolore, corporis vel magnam debitis quia enim aliquid cumque aut dolores quaerat amet officia aliquam a neque sunt quidem repellendus.</p>
+                </div>
 
+                <div style={{display:"flex", justifyContent:"end", padding:"5px"}} >
+                  <p className='sendmsg'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sint unde doloremque saepe qui, ducimus sequi ipsam dicta distinctio debitis reiciendis! Aspernatur, voluptas numquam a perspiciatis sint ipsa dolorem dignissimos saepe, temporibus impedit nulla ducimus? Omnis numquam tempora iusto, officiis nulla obcaecati, totam a dolorum tempore assumenda provident impedit voluptas autem. </p>  
+                </div>
+ 
               </div>
               <div className='msgfooter'>
                 <div style={{display:"flex", gap:"20px"}}>
-                    <input style={{fontSize:'20px'}} type="text" className='msginput' placeholder='Enter Your Message' />
-                    <button className='sendbtn'>Send</button>
+                    <input onChange={ (e)=>setMsgText(e.target.value)} style={{fontSize:'20px',padding:'5px'}} type="text" className='msginput' placeholder='Enter Your Message' />
+                    {
+                      msgText.length > 0 &&
+                      <button onClick={handleSubmitMsg} className='sendbtn'>Send</button>
+
+
+                    }
 
                 </div>
               </div>
