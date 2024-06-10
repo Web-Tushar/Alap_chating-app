@@ -30,30 +30,52 @@ const Msgbox = () => {
       <h2>please select a user</h2>
     } */}
 
-      <div className='msgmain'>
-          <div className="msgheading">
-            <div style={{display:"flex",alignItems:"center", gap:"33px"}}>
-                <div>
-                      <h3>
-                        {/* {
-                          activeChatdata.receiverid == data.uid ?
-                          activeChatdata.sendername
-                          :
-                          activeChatdata.recivername
-                        
-                        } */}
-                        
-                        </h3>
-                      <p>active</p>
+      { !activeChatdata ?
+         <div style={{display:"flex",alignItems:"center" ,fontSize:"30px", justifyContent:"center" , width:"100%"}}>
+          <h3>Please Select  User </h3>
+         </div>
+         :
+          <div className='msgmain'>
+              <div className="msgheading">
+                <div style={{display:"flex",alignItems:"center", gap:"33px"}}>
+                    <div>
+                          <h3>
+                            {
+                              activeChatdata.receiverid == data.uid ?
+                              activeChatdata.sendername
+                              :
+                              activeChatdata.recivername
+                            
+                            }
+                            
+                            </h3>
+                          <p>active</p>
+                    </div>
                 </div>
-            </div>
-            <div className='emoji'>🤢</div>
-          
-                
+                <div className='emoji'>🤢</div>
+              
+                    
+              </div>
+              <div className='msgbody'>
+                <div style={{display:"flex", justifyContent:"end", backgroundColor:"green",}} >
+                  <p className='sendmsg'>hello</p>  
+                </div>
+                <div>
+                  <p className='receivemsg'>hello</p>
+                </div>
+
+
+              </div>
+              <div className='msgfooter'>
+                <div style={{display:"flex", gap:"20px"}}>
+                    <input style={{fontSize:'20px'}} type="text" className='msginput' placeholder='Enter Your Message' />
+                    <button className='sendbtn'>Send</button>
+
+                </div>
+              </div>
           </div>
-          <div className='msgbody'></div>
-          <div className='msgfooter'></div>
-      </div>
+
+      }
     
     </>
     
