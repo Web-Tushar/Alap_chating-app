@@ -6,7 +6,7 @@ const initialState = {
 }
 
 export const authSlice = createSlice({
-  name: 'auth',
+  name: 'activemsg',
   initialState,
   reducers: {
 //    logedinuser: " ami login"

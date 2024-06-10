@@ -71,7 +71,7 @@ const handleReqConfirm =(confirminfo)=>{
                     <div className='imgbox'></div>
                     <div className='userinfo'>
                       <div>
-                        <h4>{item.displayName}</h4>
+                        <h4>{item.whosendName}</h4>
                         <p>mern stack 2306</p>
                       </div>
                       <div>

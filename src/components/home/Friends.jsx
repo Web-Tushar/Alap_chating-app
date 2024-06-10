@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import CardHeading from '../../utilites/CardHeading';
 import { Alert } from '@mui/material';
-import { getDatabase, ref, onValue,  } from "firebase/database";
+import { getDatabase, ref, onValue, remove, push, set,  } from "firebase/database";
 import { useSelector, useDispatch } from 'react-redux'; 
 
 const Friends = () => {
@@ -29,15 +29,22 @@ const Friends = () => {
 
       const handleBlock = (blockinfo) =>{
         set(push(ref(db, 'block')),{
-                // blockkhaiceid: blockinfo.receiverid,
-                // blockkhaiceemail: blockinfo
-                // blockkhaicename: blockinfo
-                // blockdecaid: blockinfo
-                // blockdecaemail: blockinfo
-                // blockdecaname: blockinfo
-            })
-        console.log(blockinfo);
+                blockkhaiceid: data.uid == blockinfo.senderid ? blockinfo.receiverid : blockinfo.senderid,
+                blockkhaiceemail: data.uid == blockinfo.senderid ? blockinfo.receiveremail : blockinfo.senderemail,
+                blockkhaicename: data.uid == blockinfo.senderid ? blockinfo.recivername : blockinfo.sendername,
+                blockdecaid: data.uid == blockinfo.receiverid ? blockinfo.senderid : blockinfo.receiverid,
+                blockdecaemail: data.uid == blockinfo.receiverid ? blockinfo.senderemail : blockinfo.receiveremail,
+                blockdecaname: data.uid == blockinfo.receiverid ? blockinfo.sendername : blockinfo.recivername,
+            }).then(()=>{
+              console.log(blockinfo);
 
+            })
+
+      }
+
+      const handleunfriend = (unfrd) =>{
+          // console.log(jkhl);
+          remove(ref(db, "friends/",unfrd.id))
       }
 
   return (
@@ -52,17 +59,18 @@ const Friends = () => {
                     <div className='imgbox'></div>
                     <div className='userinfo'>
                       <div>
-                        <h4>{item.receiverid == data.uid
+                        <h4>{item.receiverid == data.uid 
                         ?
                         item.sendername
                         :
-                        item.receivername
+                        item.recivername
+                        
                           
                            }</h4>
                         <p>mern stack 2306</p>
                       </div>
                       <div>
-                         <button>unfriend</button>
+                         <button onClick={()=>handleunfriend(item)}>unfriend</button>
                          <button onClick={()=>handleBlock(item)}>block</button>
                          
                       </div>

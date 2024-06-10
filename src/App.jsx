@@ -28,7 +28,8 @@ function App() {
                   < Route  path='/Notification' element={<Notification/>}/>                                        
                   < Route  path='/message' element={<Message/>}/>                                        
                   < Route  path='/setting' element={<Setting/>}/> 
-                  < Route   path='/profile/:id' element={<Profile/>}/>                                       
+                  < Route   path='/profile/:id' element={<Profile/>}/>
+                                                         
               </Route>
             </Route>
               {/* <Route path='/Registration' element={<Registration/>}   />  */}
