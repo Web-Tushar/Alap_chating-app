@@ -1,14 +1,50 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
-
+import { getDatabase, ref, onValue, set, push,remove } from "firebase/database";
+// import { useSelector, useDispatch } from 'react-redux';
 const Msgbox = () => {
-  const data = useSelector((state) => state.logedinUserData.value)
+  const data = useSelector((state) => state.logedinUserData.value);
   const activeChatdata = useSelector((state) => state.activeChatUser.value)
-  //  console.log(activeChatdata);
+  const db = getDatabase();
   const[msgText,setMsgText] =  useState("")
+  const [allMsg, setAllMsg] = useState([])
+      
+  // write message====
   const handleSubmitMsg = ()=>{
-    console.log(msgText);
+    set(push(ref(db, 'message')),{
+      senderid:data.uid,
+      sendername: data.displayName,
+      senderemail:data.email,
+      recivername: activeChatdata.sendername == data.uid ? activeChatdata.recivername: activeChatdata.sendername,
+      receiveremail: activeChatdata.sendername == data.uid ? activeChatdata.reciveremail: activeChatdata.senderemail,
+      receiverid: activeChatdata.sendername == data.uid ? activeChatdata.reciverid: activeChatdata.senderid,
+      message: msgText,
+  }).then(()=>{
+  console.log(" message sent successfully")
+  })
   }
+
+
+  // read message====//
+
+  useEffect(()=>{
+    const usersRef = ref(db, 'message');
+    onValue(usersRef, (snapshot) => {
+    let arr = []
+    let activeid = data.uid == activeChatdata?.senderid ? activeChatdata?.receiverid : activeChatdata?.senderid;
+    snapshot.forEach((item)=>{
+      
+      
+      if(item.val().senderid == data.uid && item.val().receiverid == activeid){
+      arr.push({...item.val(), id: item.key})
+
+      }
+    }) 
+    setAllMsg(arr);
+     });
+     },[activeChatdata])
+     console.log(allMsg);
+
   return (
     <>
     {/* { activeChatdata ?
