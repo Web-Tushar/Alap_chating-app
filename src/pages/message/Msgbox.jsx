@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { getDatabase, ref, onValue, set, push,remove } from "firebase/database";
+import { getDatabase, ref, onValue, set, push} from "firebase/database";
+import moment from 'moment/moment';
+import EmojiPicker from 'emoji-picker-react';
 // import { useSelector, useDispatch } from 'react-redux';
 const Msgbox = () => {
   const data = useSelector((state) => state.logedinUserData.value);
@@ -8,6 +10,7 @@ const Msgbox = () => {
   const db = getDatabase();
   const[msgText,setMsgText] =  useState("")
   const [allMsg, setAllMsg] = useState([])
+  
       
   // write message====
   const handleSubmitMsg = ()=>{
@@ -16,15 +19,14 @@ const Msgbox = () => {
       sendername: data.displayName,
       senderemail:data.email,
       recivername: activeChatdata.sendername == data.uid ? activeChatdata.recivername: activeChatdata.sendername,
-      receiveremail: activeChatdata.sendername == data.uid ? activeChatdata.reciveremail: activeChatdata.senderemail,
-      receiverid: activeChatdata.sendername == data.uid ? activeChatdata.reciverid: activeChatdata.senderid,
+      receiveremail: activeChatdata.sendername == data.uid ? activeChatdata.receiveremail: activeChatdata.senderemail,
+      receiverid: activeChatdata.sendername == data.uid ? activeChatdata.receiverid: activeChatdata.senderid,
       message: msgText,
+      date: `${new Date().getFullYear()}-${new Date().getMonth()+1}-${new Date().getDate()} ${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getMilliseconds()}`, 
   }).then(()=>{
   console.log(" message sent successfully")
   })
   }
-
-
   // read message====//
 
   useEffect(()=>{
@@ -34,42 +36,18 @@ const Msgbox = () => {
     let activeid = data.uid == activeChatdata?.senderid ? activeChatdata?.receiverid : activeChatdata?.senderid;
     snapshot.forEach((item)=>{
       
-      
-      if(item.val().senderid == data.uid && item.val().receiverid == activeid){
+      if((item.val().senderid == data.uid && item.val().receiverid == activeid) ||(item.val().senderid == activeid && item.val().receiverid == data.uid)){
       arr.push({...item.val(), id: item.key})
 
       }
     }) 
-    setAllMsg(arr);
+     setAllMsg(arr);
      });
      },[activeChatdata])
      console.log(allMsg);
 
   return (
     <>
-    {/* { activeChatdata ?
-      <div className='msgmain'>
-          <div className="msgheading">
-            <div style={{display:"flex",alignItems:"center", gap:"33px"}}>
-                <div className="imgbox"></div>
-                <div>
-                      <h3>
-                        {activeChatdata.sendername
-                        
-                        }
-                        
-                        </h3>
-                      <p>active</p>
-                </div>
-            </div>
-            <div className='emoji'>🤢</div>
-                
-          </div>
-      </div>
-      :
-      <h2>please select a user</h2>
-    } */}
-
       { !activeChatdata ?
          <div style={{display:"flex",alignItems:"center" ,fontSize:"30px", justifyContent:"center" , width:"100%"}}>
           <h3>Please Select  User </h3>
@@ -85,56 +63,45 @@ const Msgbox = () => {
                               activeChatdata.sendername
                               :
                               activeChatdata.recivername
-                            
                             }
-                            
                             </h3>
                           <p>active</p>
                     </div>
                 </div>
                 <div className='emoji'>🤢</div>
-              
-                    
               </div>
               <div className='msgbody'>
-                <div style={{display:"flex", justifyContent:"end", padding:"5px"}} >
-                  <p className='sendmsg'>hello</p>  
-                </div>
-                <div style={{padding:"5px"}}>
-                  <p className='receivemsg'>hello</p>
-                </div>
-                <div style={{display:"flex", justifyContent:"end", padding:"5px"}} >
-                  <p className='sendmsg'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sint unde doloremque saepe qui, ducimus sequi ipsam dicta distinctio debitis reiciendis! Aspernatur, voluptas numquam a perspiciatis sint ipsa dolorem dignissimos saepe, temporibus impedit nulla ducimus? Omnis numquam tempora iusto, officiis nulla obcaecati, totam a dolorum tempore assumenda provident impedit voluptas autem. </p>  
-                </div>
+                {
+                 allMsg.map((item,index)=>(
+                  item.senderid == data.uid ?
+                    <div style={{display:"flex", justifyContent:"end", padding:"5px"}} >
+                      <div>
+                          <p className='sendmsg'>{item.message}</p>  
+                          <p style={{fontSize:"12px",color:"gray"}}>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</p>
 
-                <div style={{ padding:"5px"}}>
-                  <p className='receivemsg'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore dicta maxime dolore, corporis vel magnam debitis quia enim aliquid cumque aut dolores quaerat amet officia aliquam a neque sunt quidem repellendus.</p>
-                </div>
-
-                <div style={{display:"flex", justifyContent:"end", padding:"5px"}} >
-                  <p className='sendmsg'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sint unde doloremque saepe qui, ducimus sequi ipsam dicta distinctio debitis reiciendis! Aspernatur, voluptas numquam a perspiciatis sint ipsa dolorem dignissimos saepe, temporibus impedit nulla ducimus? Omnis numquam tempora iusto, officiis nulla obcaecati, totam a dolorum tempore assumenda provident impedit voluptas autem. </p>  
-                </div>
- 
+                      </div>
+                    </div>
+                    :
+                      <div style={{padding:"5px"}}>
+                        <p className='receivemsg'>{item.message}</p>
+                        <p style={{fontSize:"12px",color:"gray"}}>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</p>
+                      </div> 
+                 ))
+                }
               </div>
               <div className='msgfooter'>
                 <div style={{display:"flex", gap:"20px"}}>
+                   <EmojiPicker />
                     <input onChange={ (e)=>setMsgText(e.target.value)} style={{fontSize:'20px',padding:'5px'}} type="text" className='msginput' placeholder='Enter Your Message' />
                     {
                       msgText.length > 0 &&
                       <button onClick={handleSubmitMsg} className='sendbtn'>Send</button>
-
-
                     }
-
                 </div>
               </div>
           </div>
-
       }
-    
     </>
-    
   )
 }
-
-export default Msgbox
+export default Msgbox  

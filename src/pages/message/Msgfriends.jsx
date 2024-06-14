@@ -12,7 +12,7 @@ const Msgfriends = () => {
      const activeChatdata = useSelector((state) => state.activeChatUser.value)
      const dispatch = useDispatch()
 
-     console.log(activeChatdata);
+    //  console.log(activeChatdata);
 
 
      useEffect(()=>{
