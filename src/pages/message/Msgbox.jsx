@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { getDatabase, ref, onValue, set, push} from "firebase/database";
 import moment from 'moment/moment';
-import EmojiPicker from 'emoji-picker-react';
+// import EmojiPicker from 'emoji-picker-react';
 // import { useSelector, useDispatch } from 'react-redux';
 const Msgbox = () => {
   const data = useSelector((state) => state.logedinUserData.value);
@@ -10,6 +10,7 @@ const Msgbox = () => {
   const db = getDatabase();
   const[msgText,setMsgText] =  useState("")
   const [allMsg, setAllMsg] = useState([])
+  const [showemoji,setShowEmoji] = useState(false)
   
       
   // write message====
@@ -74,7 +75,7 @@ const Msgbox = () => {
                 {
                  allMsg.map((item,index)=>(
                   item.senderid == data.uid ?
-                    <div style={{display:"flex", justifyContent:"end", padding:"5px"}} >
+                    <div key={index} style={{display:"flex", justifyContent:"end", padding:"5px"}} >
                       <div>
                           <p className='sendmsg'>{item.message}</p>  
                           <p style={{fontSize:"12px",color:"gray"}}>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</p>
@@ -90,8 +91,12 @@ const Msgbox = () => {
                 }
               </div>
               <div className='msgfooter'>
-                <div style={{display:"flex", gap:"20px"}}>
-                   <EmojiPicker />
+                <div style={{display:"flex", gap:"20px", position:"relative"}}>
+                  <button onClick={()=>setShowEmoji(!showemoji)}>Emoji</button>
+                  <div style={{position:"absolute", left:"0", bottom:"50px" }}>
+                     <EmojiPicker open={showemoji}/>
+
+                  </div>
                     <input onChange={ (e)=>setMsgText(e.target.value)} style={{fontSize:'20px',padding:'5px'}} type="text" className='msginput' placeholder='Enter Your Message' />
                     {
                       msgText.length > 0 &&
