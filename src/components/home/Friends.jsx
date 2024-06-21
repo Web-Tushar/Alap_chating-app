@@ -43,8 +43,8 @@ const Friends = () => {
       }
 
       const handleunfriend = (unfrd) =>{
-          // console.log(jkhl);
-          remove(ref(db, "friends/",unfrd.id))
+        if(data.uid == unfrd.senderid || data.uid == unfrd.receiverid)
+          remove(ref(db, "friends/", unfrd.id))
       }
 
   return (
@@ -75,7 +75,7 @@ const Friends = () => {
                          
                       </div>
                     </div>
-                </div>  
+                </div>
 
               ))
               :

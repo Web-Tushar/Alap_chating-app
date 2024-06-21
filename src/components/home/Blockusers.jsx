@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import CardHeading from '../../utilites/CardHeading'
 import { Alert } from '@mui/material'
-import { getDatabase, onValue, ref,push } from 'firebase/database'
+import { getDatabase, onValue, ref,push, remove, set } from 'firebase/database'
 import { useSelector, useDispatch } from 'react-redux'; 
 
 
@@ -28,6 +28,20 @@ console.log(blocKList);
     setblocKList(arr);
      });
      },[])
+         // unblock here ..
+
+    const handleUnblock = (blocklist) => {
+      remove(ref(db, 'block/' + blocklist.id)).then(()=> {
+          set(push(ref(db, 'friends')), {
+                blockkhaiceid: data.uid == blockinfo.senderid ? blockinfo.receiverid : blockinfo.senderid,
+                blockkhaiceemail: data.uid == blockinfo.senderid ? blockinfo.receiveremail : blockinfo.senderemail,
+                blockkhaicename: data.uid == blockinfo.senderid ? blockinfo.recivername : blockinfo.sendername,
+                blockdecaid: data.uid == blockinfo.receiverid ? blockinfo.senderid : blockinfo.receiverid,
+                blockdecaemail: data.uid == blockinfo.receiverid ? blockinfo.senderemail : blockinfo.receiveremail,
+                blockdecaname: data.uid == blockinfo.receiverid ? blockinfo.sendername : blockinfo.recivername,
+          })
+      })
+  }
 
   return (
     <div className="box">
@@ -53,7 +67,7 @@ console.log(blocKList);
                         <p>mern stack 2306</p>
                       </div>
                       <div>
-                         <button>Unblock</button>
+                         <button onClick={()=>handleUnblock(item)}>Unblock</button>
                          
                       </div>
                     </div>
