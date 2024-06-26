@@ -32,7 +32,7 @@ const Msgfriends = () => {
            },[])
 
            const handleChat = (chatinfo)=>{
-               console.log(chatinfo);
+              //  console.log(chatinfo);
                dispatch(activeUser(chatinfo))
            }
 
